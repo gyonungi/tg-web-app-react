@@ -5,7 +5,7 @@ const Form = () => {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [subject, setSubject] = useState("physical");
-  const { tg } = useTelegram;
+  const { tg } = useTelegram();
   useEffect(() => {
     tg?.MainButton.setParams({
       text: "Отправить данные",
