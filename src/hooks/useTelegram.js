@@ -12,6 +12,6 @@ export default function useTelegram() {
         tg.MainButton.show();
       }
     };
-    return { onClose, tg, user: tg.initDataUnsafe?.user };
+    return { onClose,onToggleButton, tg, user: tg.initDataUnsafe?.user };
   };
 }
