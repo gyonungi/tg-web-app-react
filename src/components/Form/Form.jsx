@@ -7,17 +7,17 @@ const Form = () => {
   const [subject, setSubject] = useState("physical");
   const { tg } = useTelegram;
   useEffect(() => {
-    tg.MainButton.setParams({
+    tg?.MainButton.setParams({
       text: "Отправить данные",
     });
   }, [tg]);
   useEffect(() => {
     if (!city || !country) {
-      tg.MainButton.hide();
+      tg?.MainButton.hide();
     } else {
-      tg.MainButton.show();
+      tg?.MainButton.show();
     }
-  }, []);
+  }, [tg]);
   const onChangeCountry = (e) => {
     setCountry(e.target.value);
   };
