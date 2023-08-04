@@ -17,7 +17,7 @@ const Form = () => {
     } else {
       tg?.MainButton.show();
     }
-  }, [tg]);
+  }, [tg, city, country]);
   const onChangeCountry = (e) => {
     setCountry(e.target.value);
   };
