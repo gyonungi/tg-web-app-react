@@ -13,9 +13,9 @@ const Form = () => {
   }, [tg]);
   useEffect(() => {
     if (!city || !country) {
-      tg?.MainButton.hide();
+      tg.MainButton.hide();
     } else {
-      tg?.MainButton.show();
+      tg.MainButton.show();
     }
   }, [tg, city, country]);
   const onChangeCountry = (e) => {
