@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProductItem from "../ProductItem/ProductItem";
 import "./ProductList.css";
 import { useTelegram } from "../../hooks/useTelegram";
@@ -54,14 +54,36 @@ const products = [
   },
 ];
 
-const getTotalPrice = (items) =>{
-  return items.reduce((acc,item)=>{
-    return acc += item.price
-  })
-}
+const getTotalPrice = (items = []) => {
+  return items.reduce((acc, item) => {
+    return (acc += item.price);
+  }, 0);
+};
 const ProductList = () => {
   const [addedItems, setAddedItems] = useState([]);
-  const { tg } = useTelegram();
+  const { tg, queryId } = useTelegram();
+
+  const onSendData = useCallback(() => {
+    const data = {
+      products: addedItems,
+      totalPrice: getTotalPrice(addedItems),
+      queryId,
+    };
+    fetch("http://localhost:8000", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }, [queryId, addedItems]);
+  useEffect(() => {
+    tg.onEvent("mainButtonClicked", onSendData);
+    return () => {
+      tg.offEvent("mainButtonClicked", onSendData);
+    };
+  }, [tg, onSendData]);
+
   const onAdd = (product) => {
     const alredyAdded = addedItems.find((item) => item.id === product.id);
     let newItems = [];
@@ -71,13 +93,13 @@ const ProductList = () => {
       newItems = [...addedItems, product];
     }
     setAddedItems(newItems);
-    if(newItems.length === 0) {
-      tg.MainButton.hide()
-    }else{
-      tg.MainButton.show()
+    if (newItems.length === 0) {
+      tg.MainButton.hide();
+    } else {
+      tg.MainButton.show();
       tg.MainButton.setParams({
-        text: `Купить ${getTotalPrice(newItems)}`
-      })
+        text: `Купить ${getTotalPrice(newItems)}`,
+      });
     }
   };
   return (
